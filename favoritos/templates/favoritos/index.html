@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio & Favoritos - {{ nome }}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .card-custom {
+            background-color: #1e1e1e;
+            border: 1px solid #2d2d2d !important;
+            color: #e0e0e0;
+        }
+        .card-interativo {
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .card-interativo:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 123, 255, 0.2) !important;
+            border-color: #0d6efd !important;
+        }
+        .text-accent {
+            color: #3b82f6 !important;
+        }
+        .badge-tech {
+            background-color: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .list-group-item {
+            background-color: transparent !important;
+            color: #d1d5db !important;
+            border-color: #2d2d2d !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra Superior -->
+    <nav class="navbar navbar-dark bg-black border-bottom border-secondary shadow-sm">
+        <div class="container">
+            <span class="navbar-brand mb-0 h1 fw-bold text-accent">{{ nome }}</span>
+            <span class="text-secondary small">{{ cargo }}</span>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row g-4">
+            
+            <!-- COLUNA ESQUERDA: MINI CURRÍCULO -->
+            <div class="col-lg-7">
+                <div class="card card-custom shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h2 class="fw-bold text-accent mb-0">{{ nome }}</h2>
+                            <span class="badge bg-secondary fs-6 text-light">{{ idade }} anos</span>
+                        </div>
+                        <h6 class="text-secondary fw-semibold mb-3">{{ cargo }}</h6>
+                        
+                        <p class="text-light">{{ resumo }}</p>
+
+                        <hr class="border-secondary my-4">
+
+                        <h5 class="fw-bold text-light mb-3">🎓 Formação Acadêmica</h5>
+                        <ul class="list-group list-group-flush mb-4">
+                            {% for item in formacao %}
+                                <li class="list-group-item px-0 py-2">• {{ item }}</li>
+                            {% endfor %}
+                        </ul>
+
+                        <h5 class="fw-bold text-light mb-3">💻 Tecnologias & Ferramentas</h5>
+                        <div>
+                            {% for skill in habilidades %}
+                                <span class="badge badge-tech m-1 p-2">{{ skill }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COLUNA DIREITA: FAVORITOS INTERATIVOS -->
+            <div class="col-lg-5">
+                <h5 class="fw-bold text-secondary mb-3">⭐ Meus Favoritos (Clique para abrir)</h5>
+
+                <!-- Card do Filme Favorito -->
+                <div class="card card-custom mb-4 card-interativo" data-bs-toggle="modal" data-bs-target="#modalFilme">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-primary mb-2">🎬 Filme Favorito</span>
+                                <h4 class="fw-bold mb-1 text-light">{{ filme.titulo }}</h4>
+                                <p class="text-secondary small mb-0">{{ filme.genero }} • {{ filme.ano }}</p>
+                            </div>
+                            <span class="btn btn-outline-primary btn-sm">Ver detalhes →</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card da Banda Favorita -->
+                <div class="card card-custom card-interativo" data-bs-toggle="modal" data-bs-target="#modalBanda">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-info text-dark mb-2">🎸 Banda Favorita</span>
+                                <h4 class="fw-bold mb-1 text-light">{{ banda.nome }}</h4>
+                                <p class="text-secondary small mb-0">{{ banda.genero }}</p>
+                            </div>
+                            <span class="btn btn-outline-info btn-sm">Ver detalhes →</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DO FILME FAVORITO -->
+    <div class="modal fade" id="modalFilme" tabindex="-1" aria-labelledby="modalFilmeLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-light border border-secondary shadow">
+                <div class="modal-header border-bottom border-secondary">
+                    <h5 class="modal-title fw-bold text-primary" id="modalFilmeLabel">🎬 {{ filme.titulo }} ({{ filme.ano }})</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="mb-2"><strong>Direção:</strong> {{ filme.diretor }}</p>
+                    <p class="mb-3"><strong>Gênero:</strong> {{ filme.genero }}</p>
+                    <h6 class="fw-bold text-accent">Sinopse:</h6>
+                    <p class="text-secondary">{{ filme.sinopse }}</p>
+                    <div class="alert alert-dark border border-secondary text-light mt-3 mb-0">
+                        <strong>Por que é meu favorito:</strong> {{ filme.motivo }}
+                    </div>
+                </div>
+                <div class="modal-footer border-top border-secondary">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DA BANDA FAVORITA -->
+    <div class="modal fade" id="modalBanda" tabindex="-1" aria-labelledby="modalBandaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-light border border-secondary shadow">
+                <div class="modal-header border-bottom border-secondary">
+                    <h5 class="modal-title fw-bold text-info" id="modalBandaLabel">🎸 {{ banda.nome }}</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="mb-2"><strong>Estilo:</strong> {{ banda.genero }}</p>
+                    <p class="mb-3"><strong>Origem:</strong> {{ banda.origem }}</p>
+                    <p class="text-secondary">{{ banda.descricao }}</p>
+                    <h6 class="fw-bold text-info mt-3">Músicas Favoritas:</h6>
+                    <ul class="list-group list-group-flush">
+                        {% for musica in banda.musicas_destaque %}
+                            <li class="list-group-item px-0 py-1 border-secondary">🎵 {{ musica }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="modal-footer border-top border-secondary">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
